@@ -27,7 +27,7 @@ class Parser:
 		open_matches = [(sp, list_matches[0]) for sp, list_matches in open_matches if len(list_matches) != 0]
 
 		# find the first closing following the opening (find all, filter smaller  ones, filter when there is none)
-		indices = [(sp, om, [match for match in sp.closing_rx.finditer(text) if match.start() > om.start()]) for sp, om in open_matches]
+		indices = [(sp, om, [match for match in sp.closing_rx.finditer(text) if match.start() >= om.start()+len(om.group(0))]) for sp, om in open_matches]
 		indices = [(sp, om, list_matches[0]) for sp, om, list_matches in indices if len(list_matches) != 0]
 
 		if len(indices) == 0:

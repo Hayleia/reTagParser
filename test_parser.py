@@ -31,6 +31,8 @@ parser.declare(Parser.SubParser('*', '*', render_italic, allows_space=False))
 parser.declare(Parser.SubParser('**', '**', lambda value, om, cm: f'[b]{value}[/b]'))
 parser.declare(Parser.SubParser('***', '***', lambda value, om, cm: f'[i][b]{value}[/b][/i]'))
 parser.declare(Parser.SubParser('`', '`', lambda value, om, cm: f'[icode]{value}[/icode]', parse_value=False))
+# escaping
+parser.declare(Parser.SubParser('\\*', '', lambda value, om, cm: f'*{value}'))
 
 # this paragraph is re-used in reverse in bbcode 2 md
 test_parse(parser, "test_toaster|| test__toaster", None)
@@ -45,6 +47,9 @@ test_parse(parser, "test * bll * test", None)
 test_parse(parser, "test *__bll__* test", "test [i][u]bll[/u][/i] test")
 test_parse(parser, "test ___bll___ test", ["test [i][u]bll[/u][/i] test", "test [u][i]bll[/i][/u] test"])
 test_parse(parser, "test ***bll*** test", ["test [i][b]bll[/b][/i] test", "test [b][i]bll[/i][/b] test"])
+
+test_parse(parser, "test \\***bll*** test", "test *[b]bll[/b]* test")
+test_parse(parser, "test *\\**bll*** test", "test [i]**bll[/i]** test")
 
 print("end test md2bbcode")
 
